@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="text-center mt-5">
+
+    <h1>🎉 Booking Confirmed!</h1>
+
+    <p><strong>Movie:</strong> {{ booking.show.movie.title }}</p>
+    <p><strong>Show Time:</strong> {{ booking.show.time }}</p>
+
+    <p><strong>Seats:</strong>
+        {% for ticket in tickets %}
+            {{ ticket.seat.number }}{% if not forloop.last %}, {% endif %}
+        {% endfor %}
+    </p>
+
+    <h4>Total: ₹{{ booking.total_amount }}</h4>
+
+    <a href="/" class="btn btn-book mt-3">Go Home</a>
+
+</div>
+
+{% endblock %}

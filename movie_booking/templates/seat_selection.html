@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container text-center mt-5">
+
+    <h2>🎟 Select Your Seats</h2>
+
+    {% if error %}
+        <p style="color:red;">{{ error }}</p>
+    {% endif %}
+
+    <div class="screen">SCREEN</div>
+
+    <form method="POST">
+        {% csrf_token %}
+
+        <div class="theatre">
+
+            {% for seat in seats %}
+                <button type="button"
+                        class="seat {% if seat.is_booked %}booked{% endif %}"
+                        onclick="toggleSeat(this, '{{ seat.id }}')">
+                    {{ seat.seat_number }}
+                </button>
+            {% endfor %}
+
+        </div>
+
+        <input type="hidden" name="seats" id="selected-seats-input">
+
+        <p class="mt-3">Selected: <span id="selected-seats">None</span></p>
+        <p>Total: ₹<span id="total-price">0</span></p>
+
+        <button type="submit" onclick="return validateSelection()">
+            Confirm Booking
+        </button>
+
+    </form>
+
+</div>
+
+<script>
+let selectedSeats = [];
+let price = 200;
+
+function toggleSeat(btn, id) {
+    if (btn.classList.contains('booked')) return;
+
+    id = String(id);
+
+    if (selectedSeats.includes(id)) {
+        selectedSeats = selectedSeats.filter(x => x !== id);
+        btn.classList.remove('selected');
+    } else {
+        selectedSeats.push(id);
+        btn.classList.add('selected');
+    }
+
+    document.getElementById("selected-seats").innerText =
+        selectedSeats.length ? selectedSeats.join(", ") : "None";
+
+    document.getElementById("total-price").innerText =
+        selectedSeats.length * price;
+
+    document.getElementById("selected-seats-input").value =
+        selectedSeats.join(",");
+}
+
+function validateSelection() {
+    if (selectedSeats.length === 0) {
+        alert("Select at least one seat");
+        return false;
+    }
+    return true;
+}
+</script>
+
+{% endblock %}

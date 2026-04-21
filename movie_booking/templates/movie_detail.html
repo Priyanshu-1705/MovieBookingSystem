@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="row align-items-center">
+
+    <div class="col-md-4 text-center">
+        {% if movie.poster %}
+        <img src="{{ movie.poster.url }}" class="detail-poster">
+        {% else %}
+        <div
+            style="height:300px; background:#ccc; display:flex; align-items:center; justify-content:center; border-radius:10px;">
+            <h4>No Poster</h4>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="col-md-8">
+        <h1>{{ movie.title }}</h1>
+        <p class="text-muted">{{ movie.genre }}</p>
+        <p>{{ movie.description }}</p>
+
+        <h4 class="mt-4">🎬 Shows</h4>
+
+        {% for show in shows %}
+        <div class="show-card">
+            <span>{{ show.time }}</span>
+            <a href="{% url 'seat_selection' show.id %}" class="btn btn-book">
+                Select Seats
+            </a>
+        </div>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}
